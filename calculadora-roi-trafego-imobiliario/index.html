@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora ROI Imobiliário</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: #2a2a38;
+    --accent: #c8ff00;
+    --accent2: #ff6b35;
+    --text: #f0f0f8;
+    --muted: #6b6b88;
+    --positive: #4ade80;
+    --negative: #f87171;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    padding: 40px 20px;
+    background-image: 
+      radial-gradient(ellipse at 20% 50%, rgba(200, 255, 0, 0.04) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(255, 107, 53, 0.04) 0%, transparent 60%);
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  header {
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  .tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+  }
+
+  h1 span {
+    color: var(--muted);
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover {
+    border-color: #3a3a50;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card:focus-within::before {
+    opacity: 1;
+  }
+
+  .card-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-label .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .field {
+    margin-bottom: 18px;
+  }
+
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .prefix {
+    position: absolute;
+    left: 14px;
+    font-size: 13px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  input[type="number"] {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    padding: 12px 14px 12px 32px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -moz-appearance: textfield;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  input[type="number"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(200, 255, 0, 0.08);
+  }
+
+  .suffix {
+    position: absolute;
+    right: 14px;
+    font-size: 12px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  /* RESULTS */
+  .results-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+
+  .results-header {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .results-header .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  @media (max-width: 640px) {
+    .metrics-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .metric {
+    background: var(--surface2);
+    border-radius: 12px;
+    padding: 18px;
+    border: 1px solid var(--border);
+  }
+
+  .metric-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .metric-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -1px;
+  }
+
+  .metric-value.positive { color: var(--positive); }
+  .metric-value.negative { color: var(--negative); }
+  .metric-value.accent { color: var(--accent); }
+
+  /* ROI BAR */
+  .roi-visual {
+    margin-top: 8px;
+  }
+
+  .roi-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .roi-bar-track {
+    height: 8px;
+    background: var(--surface2);
+    border-radius: 99px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .roi-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.6s cubic-bezier(0.23, 1, 0.32, 1), background 0.3s;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+
+  /* BREAKDOWN TABLE */
+  .breakdown {
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+  }
+
+  .breakdown-title {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13px;
+  }
+
+  .breakdown-row:last-child { border-bottom: none; }
+
+  .breakdown-row .key { color: var(--muted); }
+  .breakdown-row .val { font-weight: 500; letter-spacing: 0.5px; }
+
+  /* VERDICT */
+  .verdict {
+    background: var(--surface2);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 20px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .verdict-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  .verdict-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .verdict-text strong {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    display: block;
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  /* RESET BTN */
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .reset-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 48px;
+    font-size: 11px;
+    color: #3a3a50;
+    letter-spacing: 1px;
+  }
+
+  .animate-in {
+    animation: fadeUp 0.4s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .platform-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .platform-btn {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .platform-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(200, 255, 0, 0.05);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <span class="tag">↗ Tráfego Imobiliário</span>
+    <h1>Calculadora<br><span>de ROI</span></h1>
+    <p class="subtitle">META ADS + GOOGLE ADS — Análise por campanha</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- INVESTIMENTO -->
+    <div class="card animate-in" style="animation-delay:0.05s">
+      <div class="card-label"><div class="dot"></div> Investimento</div>
+
+      <div class="field">
+        <label>Plataforma</label>
+        <div class="platform-toggle">
+          <div class="platform-btn active" onclick="setPlataforma('meta', this)">META ADS</div>
+          <div class="platform-btn" onclick="setPlataforma('google', this)">GOOGLE ADS</div>
+          <div class="platform-btn" onclick="setPlataforma('ambos', this)">AMBOS</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Investimento total (R$)</label>
+        <div class="input-wrap">
+          <span class="prefix">R$</span>
+          <input type="number" id="investimento" value="3000" min="0" oninput="calcular()">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Período (dias)</label>
+        <div class="input-wrap">
+          <span class="prefix">#</span>
+          <input type="number" id="periodo" value="30" min="1" oninput="calcular()">
+          <span class="suffix">dias</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Taxa de gestão (R$)</label>
+        <div class="input-wrap">
+          <span class="prefix">R$</span>
+          <input type="number" id="taxaGestao" value="1500" min="0" oninput="calcular()">
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTADOS DA CAMPANHA -->
+    <div class="card animate-in" style="animation-delay:0.1s">
+      <div class="card-label"><div class="dot"></div> Resultados da Campanha</div>
+
+      <div class="field">
+        <label>Leads gerados</label>
+        <div class="input-wrap">
+          <span class="prefix">#</span>
+          <input type="number" id="leads" value="80" min="0" oninput="calcular()">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Visitas realizadas</label>
+        <div class="input-wrap">
+          <span class="prefix">#</span>
+          <input type="number" id="visitas" value="12" min="0" oninput="calcular()">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Propostas recebidas</label>
+        <div class="input-wrap">
+          <span class="prefix">#</span>
+          <input type="number" id="propostas" value="4" min="0" oninput="calcular()">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Vendas fechadas</label>
+        <div class="input-wrap">
+          <span class="prefix">#</span>
+          <input type="number" id="vendas" value="1" min="0" oninput="calcular()">
+        </div>
+      </div>
+    </div>
+
+    <!-- TICKET -->
+    <div class="card animate-in" style="animation-delay:0.15s">
+      <div class="card-label"><div class="dot"></div> Ticket & Comissão</div>
+
+      <div class="field">
+        <label>Valor médio do imóvel (R$)</label>
+        <div class="input-wrap">
+          <span class="prefix">R$</span>
+          <input type="number" id="ticketImovel" value="500000" min="0" oninput="calcular()">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Comissão da imobiliária (%)</label>
+        <div class="input-wrap">
+          <span class="prefix">%</span>
+          <input type="number" id="comissao" value="5" min="0" max="100" step="0.1" oninput="calcular()">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>% da comissão destinado ao marketing</label>
+        <div class="input-wrap">
+          <span class="prefix">%</span>
+          <input type="number" id="pctMarketing" value="30" min="0" max="100" step="1" oninput="calcular()">
+        </div>
+      </div>
+    </div>
+
+    <!-- BENCHMARKS -->
+    <div class="card animate-in" style="animation-delay:0.2s">
+      <div class="card-label"><div class="dot"></div> Benchmarks do Funil</div>
+
+      <div class="field">
+        <label>Meta de CPL (R$)</label>
+        <div class="input-wrap">
+          <span class="prefix">R$</span>
+          <input type="number" id="metaCPL" value="50" min="0" oninput="calcular()">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Meta de taxa de conversão (%)</label>
+        <div class="input-wrap">
+          <span class="prefix">%</span>
+          <input type="number" id="metaConversao" value="2" min="0" max="100" step="0.1" oninput="calcular()">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Impressões entregues</label>
+        <div class="input-wrap">
+          <span class="prefix">#</span>
+          <input type="number" id="impressoes" value="150000" min="0" oninput="calcular()">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Cliques no anúncio</label>
+        <div class="input-wrap">
+          <span class="prefix">#</span>
+          <input type="number" id="cliques" value="900" min="0" oninput="calcular()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTADOS -->
+  <div class="results-card animate-in" style="animation-delay:0.25s">
+    <div class="results-header"><div class="dot"></div> Análise Completa</div>
+
+    <div class="metrics-grid">
+      <div class="metric">
+        <div class="metric-label">ROI</div>
+        <div class="metric-value accent" id="roi-val">—</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">ROAS</div>
+        <div class="metric-value" id="roas-val">—</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">CPL Real</div>
+        <div class="metric-value" id="cpl-val">—</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Custo/Venda</div>
+        <div class="metric-value" id="cpv-val">—</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">CTR</div>
+        <div class="metric-value" id="ctr-val">—</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Conv. Lead→Venda</div>
+        <div class="metric-value" id="conv-val">—</div>
+      </div>
+    </div>
+
+    <div class="roi-visual">
+      <div class="roi-bar-label">
+        <span>ROI da campanha</span>
+        <span id="roi-bar-pct">0%</span>
+      </div>
+      <div class="roi-bar-track">
+        <div class="roi-bar-fill" id="roi-bar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="breakdown">
+      <div class="breakdown-title">Detalhamento financeiro</div>
+
+      <div class="breakdown-row">
+        <span class="key">Investimento em mídia</span>
+        <span class="val" id="b-midia">—</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="key">Taxa de gestão</span>
+        <span class="val" id="b-gestao">—</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="key">Custo total (mídia + gestão)</span>
+        <span class="val" id="b-total">—</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="key">Receita de comissão gerada</span>
+        <span class="val" id="b-receita">—</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="key">Receita atribuída ao marketing</span>
+        <span class="val" id="b-mkt">—</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="key">Lucro líquido (marketing)</span>
+        <span class="val" id="b-lucro">—</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="key">CPL vs meta</span>
+        <span class="val" id="b-cpl-meta">—</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="key">Conv. vs meta</span>
+        <span class="val" id="b-conv-meta">—</span>
+      </div>
+    </div>
+
+    <div class="verdict" id="verdict">
+      <div class="verdict-icon" id="verdict-icon">📊</div>
+      <div class="verdict-text" id="verdict-text">
+        <strong>Aguardando dados</strong>
+        Preencha os campos acima para ver a análise da campanha.
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:right">
+    <button class="reset-btn" onclick="resetar()">↺ Resetar valores</button>
+  </div>
+
+  <footer>ROI CALCULATOR — TRÁFEGO IMOBILIÁRIO</footer>
+</div>
+
+<script>
+  const defaults = {
+    investimento: 3000, periodo: 30, taxaGestao: 1500,
+    leads: 80, visitas: 12, propostas: 4, vendas: 1,
+    ticketImovel: 500000, comissao: 5, pctMarketing: 30,
+    metaCPL: 50, metaConversao: 2, impressoes: 150000, cliques: 900
+  };
+
+  function g(id) { return parseFloat(document.getElementById(id).value) || 0; }
+  function fmt(n) { return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function fmtPct(n) { return n.toFixed(2) + '%'; }
+  function fmtR(n) { return 'R$ ' + fmt(n); }
+
+  function setPlataforma(p, el) {
+    document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function calcular() {
+    const inv = g('investimento');
+    const gestao = g('taxaGestao');
+    const custo = inv + gestao;
+
+    const leads = g('leads');
+    const vendas = g('vendas');
+    const ticket = g('ticketImovel');
+    const comissao = g('comissao') / 100;
+    const pctMkt = g('pctMarketing') / 100;
+    const metaCPL = g('metaCPL');
+    const metaConv = g('metaConversao') / 100;
+    const impressoes = g('impressoes');
+    const cliques = g('cliques');
+
+    const receitaComissao = vendas * ticket * comissao;
+    const receitaMkt = receitaComissao * pctMkt;
+    const lucro = receitaMkt - custo;
+    const roi = custo > 0 ? (lucro / custo) * 100 : 0;
+    const roas = custo > 0 ? receitaMkt / custo : 0;
+    const cpl = leads > 0 ? inv / leads : 0;
+    const cpv = vendas > 0 ? custo / vendas : 0;
+    const ctr = impressoes > 0 ? (cliques / impressoes) * 100 : 0;
+    const conv = leads > 0 ? (vendas / leads) * 100 : 0;
+
+    // Update metrics
+    const roiEl = document.getElementById('roi-val');
+    roiEl.textContent = fmtPct(roi);
+    roiEl.className = 'metric-value ' + (roi >= 0 ? 'positive' : 'negative');
+
+    document.getElementById('roas-val').textContent = roas.toFixed(2) + 'x';
+    document.getElementById('cpl-val').textContent = fmtR(cpl);
+    document.getElementById('cpv-val').textContent = fmtR(cpv);
+    document.getElementById('ctr-val').textContent = fmtPct(ctr);
+    document.getElementById('conv-val').textContent = fmtPct(conv);
+
+    // Bar
+    const barPct = Math.min(Math.max(roi, 0), 300);
+    document.getElementById('roi-bar').style.width = (barPct / 300 * 100) + '%';
+    document.getElementById('roi-bar-pct').textContent = fmtPct(roi);
+
+    // Breakdown
+    document.getElementById('b-midia').textContent = fmtR(inv);
+    document.getElementById('b-gestao').textContent = fmtR(gestao);
+    document.getElementById('b-total').textContent = fmtR(custo);
+    document.getElementById('b-receita').textContent = fmtR(receitaComissao);
+    document.getElementById('b-mkt').textContent = fmtR(receitaMkt);
+
+    const lucroEl = document.getElementById('b-lucro');
+    lucroEl.textContent = fmtR(lucro);
+    lucroEl.style.color = lucro >= 0 ? 'var(--positive)' : 'var(--negative)';
+
+    const cplDiff = cpl - metaCPL;
+    const cplMetaEl = document.getElementById('b-cpl-meta');
+    if (metaCPL > 0) {
+      cplMetaEl.textContent = (cplDiff > 0 ? '+' : '') + fmtR(cplDiff) + ' vs meta';
+      cplMetaEl.style.color = cplDiff <= 0 ? 'var(--positive)' : 'var(--negative)';
+    } else {
+      cplMetaEl.textContent = '—';
+      cplMetaEl.style.color = 'var(--muted)';
+    }
+
+    const convMeta = metaConv * 100;
+    const convDiff = conv - convMeta;
+    const convMetaEl = document.getElementById('b-conv-meta');
+    if (metaConv > 0) {
+      convMetaEl.textContent = (convDiff > 0 ? '+' : '') + fmtPct(convDiff) + ' vs meta';
+      convMetaEl.style.color = convDiff >= 0 ? 'var(--positive)' : 'var(--negative)';
+    } else {
+      convMetaEl.textContent = '—';
+      convMetaEl.style.color = 'var(--muted)';
+    }
+
+    // Verdict
+    let icon, title, text;
+    if (roi >= 200) {
+      icon = '🚀'; title = 'Campanha Excelente';
+      text = `ROI de ${fmtPct(roi)} — campanha altamente lucrativa. ROAS de ${roas.toFixed(1)}x. Considere escalar o investimento mantendo a estrutura atual.`;
+    } else if (roi >= 50) {
+      icon = '✅'; title = 'Campanha Saudável';
+      text = `ROI de ${fmtPct(roi)} — campanha com retorno positivo. ROAS de ${roas.toFixed(1)}x. Monitore CPL (${fmtR(cpl)}) e otimize criativos para escalar.`;
+    } else if (roi >= 0) {
+      icon = '⚠️'; title = 'Campanha no Limite';
+      text = `ROI de ${fmtPct(roi)} — margem positiva mas pequena. Revise segmentação, criativos e qualidade dos leads. CPL atual: ${fmtR(cpl)}.`;
+    } else {
+      icon = '🔴'; title = 'Campanha no Prejuízo';
+      text = `ROI negativo de ${fmtPct(roi)}. Custo total (${fmtR(custo)}) supera a receita atribuída ao marketing (${fmtR(receitaMkt)}). Revisar urgente: orçamento, segmentação ou ticket médio.`;
+    }
+
+    document.getElementById('verdict-icon').textContent = icon;
+    document.getElementById('verdict-text').innerHTML = `<strong>${title}</strong>${text}`;
+  }
+
+  function resetar() {
+    Object.keys(defaults).forEach(k => {
+      if (document.getElementById(k)) document.getElementById(k).value = defaults[k];
+    });
+    calcular();
+  }
+
+  calcular();
+</script>
+</body>
+</html>
