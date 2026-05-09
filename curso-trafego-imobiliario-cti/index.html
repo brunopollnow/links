@@ -25,6 +25,7 @@ src="https://www.facebook.com/tr?id=665161457420781&ev=PageView&noscript=1"
 <link rel="apple-touch-icon" href="favicon.png">
 
  
+ 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CTI - Comunidade Tráfego Imobiliário | Bruno Pollnow</title>
@@ -235,19 +236,30 @@ src="https://www.facebook.com/tr?id=665161457420781&ev=PageView&noscript=1"
     .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-bottom: 28px; }
     .trust-row {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
       margin-top: 26px;
-      max-width: 690px;
+      max-width: 640px;
     }
     .trust-item {
       border: 1px solid var(--white-line);
       background: rgba(255,255,255,0.045);
       border-radius: 18px;
       padding: 16px;
+      min-height: 148px;
     }
-    .trust-item strong { display: block; color: var(--gold-2); font-size: 18px; margin-bottom: 3px; }
-    .trust-item span { color: var(--muted); font-size: 13px; line-height: 1.35; }
+    .trust-item strong {
+      display: block;
+      color: var(--gold-2);
+      font-size: 18px;
+      margin-bottom: 6px;
+      line-height: 1.15;
+    }
+    .trust-item span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
 
     .visual-card {
       position: relative;
@@ -588,6 +600,7 @@ src="https://www.facebook.com/tr?id=665161457420781&ev=PageView&noscript=1"
       h2 { font-size: 35px; }
       .hero-sub, .lead { font-size: 17px; }
       .hero-actions .btn, .bonus-strip .btn { width: 100%; }
+      .trust-row { grid-template-columns: 1fr; max-width: 100%; }
       .deadline-inner { flex-direction: column; gap: 2px; padding: 10px 0; line-height: 1.35; }
       .urgency-note { border-radius: 18px; align-items: flex-start; }
       .metric-grid, .split-cards, .module-grid, .proof-grid, .bonus-strip, .lesson-groups { grid-template-columns: 1fr; }
@@ -640,7 +653,7 @@ src="https://www.facebook.com/tr?id=665161457420781&ev=PageView&noscript=1"
           <div class="trust-row">
             <div class="trust-item"><strong>+60 aulas</strong><span>Conteúdo completo para estruturar campanhas imobiliárias.</span></div>
             <div class="trust-item"><strong>+50 bônus</strong><span>Materiais extras para acelerar sua execução.</span></div>
-            <div class="trust-item"><strong>Atualizações</strong><span>Novas aulas e insights mensais com o que muda no mercado.</span></div>
+            <div class="trust-item"><strong>Atualizações</strong><span>Novas aulas mensais com mudanças do mercado.</span></div>
             <div class="trust-item"><strong>Até 19 de maio</strong><span>Inscrições abertas somente até 23:59.</span></div>
           </div>
         </div>
