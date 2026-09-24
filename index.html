@@ -1117,6 +1117,25 @@
       align-items: center;
       flex-wrap: wrap;
     }
+    .instagram-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 4px;
+      color: rgba(17,24,39,.7);
+      font-size: .92rem;
+      font-weight: 750;
+      transition: color .18s ease, transform .18s ease;
+    }
+    .instagram-inline:hover {
+      color: var(--navy);
+      transform: translateY(-1px);
+    }
+    .instagram-inline svg {
+      width: 20px;
+      height: 20px;
+      flex: 0 0 auto;
+    }
 
     .content-section {
       position: relative;
@@ -1136,6 +1155,70 @@
     }
     .content-section .container { position: relative; z-index: 1; }
     .content-section .section-title { max-width: 760px; margin-inline: auto; }
+    .instagram-proof {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 20px;
+      align-items: center;
+      margin: 0 0 20px;
+      padding: 22px 24px;
+      border-radius: 26px;
+      border: 1px solid rgba(255,255,255,.11);
+      background:
+        radial-gradient(circle at 10% 20%, rgba(214,41,118,.14), transparent 28%),
+        radial-gradient(circle at 22% 0%, rgba(250,126,30,.09), transparent 24%),
+        rgba(255,255,255,.055);
+      box-shadow: 0 20px 44px rgba(0,0,0,.15);
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .instagram-proof:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,.2);
+      background:
+        radial-gradient(circle at 10% 20%, rgba(214,41,118,.18), transparent 30%),
+        radial-gradient(circle at 22% 0%, rgba(250,126,30,.11), transparent 26%),
+        rgba(255,255,255,.07);
+    }
+    .instagram-proof-icon {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.11);
+    }
+    .instagram-proof-icon svg { width: 27px; height: 27px; }
+    .instagram-proof-copy strong {
+      display: block;
+      color: #fff;
+      font-size: 1.05rem;
+      letter-spacing: -.02em;
+    }
+    .instagram-proof-copy p {
+      margin: 5px 0 0;
+      color: rgba(248,250,252,.68);
+      font-size: .92rem;
+      line-height: 1.5;
+    }
+    .instagram-proof-copy .instagram-handle {
+      display: inline-block;
+      margin-top: 8px;
+      color: var(--gold-soft);
+      font-size: .84rem;
+      font-weight: 800;
+      letter-spacing: .01em;
+    }
+    .instagram-proof .btn {
+      white-space: nowrap;
+      background: rgba(255,255,255,.09);
+      border-color: rgba(255,255,255,.14);
+      color: #fff;
+    }
+    .instagram-proof .btn:hover {
+      background: rgba(255,255,255,.14);
+      border-color: rgba(255,255,255,.24);
+    }
     .content-grid {
       display: grid;
       grid-template-columns: 1.45fr .78fr .78fr;
@@ -1571,6 +1654,9 @@
       .photo-badge { top: 26px; left: 26px; }
       .hero-card-footer > div { padding: 14px; }
       .problem-grid, .fit-grid, .about-highlights { grid-template-columns: 1fr; }
+      .instagram-proof { grid-template-columns: auto 1fr; padding: 20px; gap: 14px; }
+      .instagram-proof .btn { grid-column: 1 / -1; width: 100%; justify-content: center; }
+      .instagram-inline { width: 100%; justify-content: center; padding: 6px 0 0; }
       .method-card { min-height: 0; padding: 24px 20px 24px 76px; }
       .method-card .step { left: 8px; top: 23px; }
       .method-grid::before { left: 29px; }
@@ -1953,6 +2039,17 @@
           </div>
           <div class="about-actions">
             <a class="btn btn-gold" href="https://api.whatsapp.com/send?phone=5541987153723&amp;text=Ol%C3%A1%2C%20Bruno!%20Gostaria%20de%20solicitar%20uma%20an%C3%A1lise%20da%20minha%20opera%C3%A7%C3%A3o%20imobili%C3%A1ria." target="_blank" rel="noopener noreferrer">Solicitar uma análise →</a>
+            <a class="instagram-inline" href="https://www.instagram.com/brunopollnow" target="_blank" rel="noopener noreferrer" aria-label="Acessar Instagram de Bruno Pollnow">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <defs>
+                  <linearGradient id="ig-about" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#feda75"/><stop offset="25%" stop-color="#fa7e1e"/><stop offset="50%" stop-color="#d62976"/><stop offset="75%" stop-color="#962fbf"/><stop offset="100%" stop-color="#4f5bd5"/>
+                  </linearGradient>
+                </defs>
+                <path fill="url(#ig-about)" d="M7.5 2h9A5.5 5.5 0 0122 7.5v9A5.5 5.5 0 0116.5 22h-9A5.5 5.5 0 012 16.5v-9A5.5 5.5 0 017.5 2zm4.5 5.5a4 4 0 100 8 4 4 0 000-8zm0 6.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5zm4.75-6.75a1 1 0 100-2 1 1 0 000 2z"/>
+              </svg>
+              <span>Ver conteúdo no Instagram · @brunopollnow</span>
+            </a>
           </div>
         </div>
       </div>
@@ -1965,6 +2062,25 @@
           <h2>Conteúdo de quem vive o tráfego imobiliário na prática.</h2>
           <p>Análises e estratégias sobre anúncios, criativos e decisões que influenciam a geração de oportunidades no mercado imobiliário.</p>
         </div>
+
+        <a class="instagram-proof" href="https://www.instagram.com/brunopollnow" target="_blank" rel="noopener noreferrer" aria-label="Acessar o Instagram de Bruno Pollnow">
+          <span class="instagram-proof-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <defs>
+                <linearGradient id="ig-proof" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#feda75"/><stop offset="25%" stop-color="#fa7e1e"/><stop offset="50%" stop-color="#d62976"/><stop offset="75%" stop-color="#962fbf"/><stop offset="100%" stop-color="#4f5bd5"/>
+                </linearGradient>
+              </defs>
+              <path fill="url(#ig-proof)" d="M7.5 2h9A5.5 5.5 0 0122 7.5v9A5.5 5.5 0 0116.5 22h-9A5.5 5.5 0 012 16.5v-9A5.5 5.5 0 017.5 2zm4.5 5.5a4 4 0 100 8 4 4 0 000-8zm0 6.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5zm4.75-6.75a1 1 0 100-2 1 1 0 000 2z"/>
+            </svg>
+          </span>
+          <span class="instagram-proof-copy">
+            <strong>Acompanhe meu trabalho no Instagram</strong>
+            <p>Conteúdos frequentes sobre tráfego pago, campanhas, criativos e estratégias aplicadas ao mercado imobiliário.</p>
+            <span class="instagram-handle">@brunopollnow</span>
+          </span>
+          <span class="btn">Ver Instagram →</span>
+        </a>
 
         <div class="content-grid">
           <a class="content-card featured" href="https://www.youtube.com/@brunopollnow" target="_blank" rel="noopener noreferrer">
